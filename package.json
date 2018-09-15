@@ -13,7 +13,8 @@
     "nodemon": "^1.18.4"
   },
   "scripts": {
-    "test": "mocha"
+    "start": "node server.js",
+    "test": "mocha test\\testapp.js"
   },
   "author": "Joseph Pravin",
   "license": "ISC"
