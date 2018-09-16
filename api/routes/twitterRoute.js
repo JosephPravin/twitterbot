@@ -28,7 +28,13 @@ router.post('/', (req, res, next) => {
         }
     }
     
-    Twitter.post('/statuses/update', {status: tweetBody}, (err, tweet, resp)=>{
+    Twitter.post('/statuses/update', {status: tweetBody})
+    .then((tweet, resp)=>{
+            res.status(200).json({
+                tweet: tweet.text
+            });
+    })
+    .catch((err)=>{
         if(err){
             res.status(500).json({
                 error: {
@@ -36,13 +42,7 @@ router.post('/', (req, res, next) => {
                 }
             })
         }
-        else{
-            res.status(200).json({
-                tweet: tweet.text
-            });
-        }
     });
-    
 });
 
 router.get('/search', (req, res, next) => {
@@ -66,18 +66,15 @@ router.get('/search', (req, res, next) => {
          return;
     }
 
+    // limiting the searc result count to 5
     let params = {
         q: "#"+req.query.q,
-        lang: 'en'
+        lang: 'en',
+        count: 5
     }
 
-    Twitter.get('/search/tweets', params, (err, tweet, resp)=>{
-        if(err){
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
+    Twitter.get('/search/tweets', params)
+    .then((tweet, resp)=>{
 
         // construct an array of tweets
         let tweets = [];
@@ -93,7 +90,15 @@ router.get('/search', (req, res, next) => {
             'length':tweets.length,
             'tweets':tweets
         });
-    });
+    })
+    .catch((err)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }
+    })
 });
 
 
