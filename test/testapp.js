@@ -3,7 +3,6 @@ const expect = require('chai').expect;
 const request = require('request');
 
 const validate = require('../api/util/validate');
-const twitterRoute = require('../api/routes/twitterRoute');
 
 it('Valid tweet - returns true', () => {
     assert.equal(validate.isValidTweet("Hello world"), true);
